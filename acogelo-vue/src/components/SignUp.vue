@@ -76,7 +76,8 @@ export default {
     methods: {
         processSignUp: function(){
             axios.post(
-                "https://server-acogelo.herokuapp.com/user/", 
+                //"https://server-acogelo.herokuapp.com/user/",
+				"http://localhost:8000/user/",
                 this.user,  
                 {headers: {}}
             )

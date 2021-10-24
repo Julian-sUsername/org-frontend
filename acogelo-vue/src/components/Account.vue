@@ -14,72 +14,75 @@
 
 
 <script>
-import jwt_decode from "jwt-decode";
-import axios from 'axios';
+	import jwt_decode from "jwt-decode";
+	import axios from 'axios';
 
-export default {
-    name: "Account",
-    //Se guarda la info que se trae del db
-    data: function(){
-        return {
-            username: "",
-            nombres: "",
-            apellidos: "",
-            email: "",
-            loaded: false,
-        }
-    },
+	export default {
+	name: "Account",
+	//Se guarda la info que se trae del db
+	data: function(){
+	return {
+	username: "",
+	nombres: "",
+	apellidos: "",
+	email: "",
+	loaded: false,
+	}
+	},
 
-    methods: {
-        getData: async function () {
+	methods: {
+	getData: async function () {
 
-            if (localStorage.getItem("token_access") === null || localStorage.getItem("token_refresh") === null) {
-                this.$emit('logOut');
-                return;
-			}
-            //Esperar a verificar
-            await this.verifyToken();
-            
-            let token = localStorage.getItem("token_access");
-            //Desencriptar el access token
-            let userId = jwt_decode(token).user_id.toString();
-            
-            axios.get(`https://server-acogelo.herokuapp.com/user/${userId}/`, {headers: {'Authorization': `Bearer ${token}`}})
-                .then((result) => {
-                    //Inicializar los valores cuando se traen del get
-                    this.username = result.data.username;
-                    this.nombres = result.data.nombres;
-                    this.apellidos = result.data.apellidos;
-                    //this.celular = result.data.celular;
-                    this.email = result.data.email;
-                    //this.dpto_residencia = result.data.dpto_residencia;
-                    //this.ciudad_residencia = result.data.ciudad_residencia;
-                    //Rederizar la informacion
-                    this.loaded = true;
-                    })
-                .catch(() => {
-                    this.$emit('logOut');
-                });
-        },
+	if (localStorage.getItem("token_access") === null || localStorage.getItem("token_refresh") === null) {
+	this.$emit('logOut');
+	return;
+	}
+	//Esperar a verificar
+	await this.verifyToken();
 
-        verifyToken: function () {
-            //Verificar 
-            return axios.post("https://server-acogelo.herokuapp.com/refresh/", {refresh: localStorage.getItem("token_refresh")}, {headers: {}})
-				.then((result) => {
-                    //Cambio del storage
-					localStorage.setItem("token_access", result.data.access);		
-				})
-                //Por si hay error, get out
-				.catch(() => {
-					this.$emit('logOut');
-				});
-        }
-    },
+	let token = localStorage.getItem("token_access");
+	//Desencriptar el access token
+	let userId = jwt_decode(token).user_id.toString();
 
-    created: async function(){
-        this.getData();
-    },
-}
+	//axios.get(`https://server-acogelo.herokuapp.com/user/${userId}/`, {headers: {'Authorization': `Bearer ${token}`}})
+	//axios.get(`https://server-test-acogelo.herokuapp.com/user/${userId}/`, {headers: {'Authorization': `Bearer ${token}`}})
+	axios.get(`http://localhost:8000/user/${userId}/`, {headers: {'Authorization': `Bearer ${token}`}})
+	.then((result) => {
+	//Inicializar los valores cuando se traen del get
+	this.username = result.data.username;
+	this.nombres = result.data.nombres;
+	this.apellidos = result.data.apellidos;
+	//this.celular = result.data.celular;
+	this.email = result.data.email;
+	//this.dpto_residencia = result.data.dpto_residencia;
+	//this.ciudad_residencia = result.data.ciudad_residencia;
+	//Rederizar la informacion
+	this.loaded = true;
+	})
+	.catch(() => {
+	this.$emit('logOut');
+	});
+	},
+
+	verifyToken: function () {
+	//Verificar
+	//return axios.post("https://server-acogelo.herokuapp.com/refresh/", {refresh: localStorage.getItem("token_refresh")}, {headers: {}})
+	return axios.post("http://localhost:8000/refresh/", {refresh: localStorage.getItem("token_refresh")}, {headers: {}})
+	.then((result) => {
+	//Cambio del storage
+	localStorage.setItem("token_access", result.data.access);
+	})
+	//Por si hay error, get out
+	.catch(() => {
+	this.$emit('logOut');
+	});
+	}
+	},
+
+	created: async function(){
+	this.getData();
+	},
+	}
 </script>
 
 

@@ -5,6 +5,7 @@ import LogIn from './components/LogIn.vue'
 import SignUp from './components/SignUp.vue'
 import Home from './components/Home.vue'
 import Account from './components/Account.vue'
+import Mascotas from './components/Mascotas.vue'
 
 const routes = [{
   //Primera ruta
@@ -29,9 +30,14 @@ const routes = [{
   component: Home
 },
 {
-  path: '/user/account',
+  path: '/user/Account',
   name: "account",
   component: Account
+},
+{
+  path: '/user/MascotasParaAdoptar',
+  name: "mascotas",
+  component: Mascotas
 }
 ]
 

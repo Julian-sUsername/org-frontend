@@ -5,7 +5,8 @@
       <h1>Acogelo Mision TIC</h1>
       <nav>
         <button v-if="is_auth" v-on:click="loadHome">Inicio</button>
-        <button v-if="is_auth" @click="loadAccount">Cuenta</button>
+		 <!--  <button v-if="is_auth" @click="loadAccount">Cuenta</button> -->
+        <button v-if="is_auth" @click="loadMascotas">Mascotas</button>
         <button v-if="is_auth" v-on:click="logOut">Cerrar Sesión</button>
         <button v-if="!is_auth" v-on:click="loadLogIn">Iniciar Sesión</button>
         <button v-if="!is_auth" v-on:click="loadSignUp">Registrarse</button>
@@ -20,11 +21,11 @@
       >
       </router-view>
     </div>
-
+<!--
     <div class="footer">
       <h2>Acogelo 2022</h2>
-    </div>
-  </div>
+    </div> -->
+  </div> 
 </template>
 
 
@@ -90,8 +91,10 @@ export default {
       this.verifyAuth();
     },
     //Ver cuenta
-    loadAccount: function () {
-      this.$router.push({ name: "account" });
+    //loadAccount: function () {
+	loadMascotas: function () {
+      //this.$router.push({ name: "account" });
+      this.$router.push({ name: "mascotas" });
     },
   },
   //Verificacion si el usuario esta logueado o no
@@ -164,6 +167,7 @@ body {
   background: #fdfefe;
 }
 
+/*
 .footer {
   margin: 0;
   padding: 0;
@@ -182,5 +186,5 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-}
+} */
 </style>
